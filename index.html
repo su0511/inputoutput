@@ -1,11 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple Mood Poem Generator</title>
+	<style>
+		body {
+			font-family: Georgia, 'Times New Roman', Times, serif;
+			text-align: center;
+			margin-top: 100px;
+			transition: background-color 0.3s ease-in-out;
+            font-size: 30px;
+		}
+		select, button, input {
+			padding: 20px;
+			font-size: 20px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+			border-radius: 5px;
+			border: 2px solid #333;
+			cursor: pointer;
+			display: block;
+			margin: 10px auto;
+		}
+		button {
+			background-color: black;
+			color: white;
+			transition: background-color 0.3s ease-in-out;
+		}
+		button:hover {
+			background-color: gray;
+		}
+		#output {
+			margin-top: 20px;
+			font-size: 18px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+			font-style: italic;
+            font-weight: 100;
+			width: 60%;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center; 
+            line-height: 2;
+		}
+	</style>
 </head>
+
 <body>
-    hello world!
+
+	<h2>MOOD POEM</h2>
+
+	<select id="mood-select">
+		<option value="">-- Select Mood --</option>
+		<option value="excited">excited</option>
+		<option value="sad">sad</option>
+		<option value="angry">angry</option>
+		<option value="relaxed">relaxed</option>
+		<option value="neutral">neutral</option>
+	</select>
+
+	<input type="range" value="10" min="2" max="30" id="poem-length">
+	<button onclick="generatePoem();">Create Your Poem!</button>
+
+	<div id="output"></div>
+
+	<script>
+		let moodColors = {
+			"excited": ["#FF4500", "#FF6347", "#FFD700"],  
+			"sad": ["#1E90FF", "#4169E1", "#000080"],      
+			"angry": ["#8B0000", "#B22222", "#DC143C"],    
+			"relaxed": ["#3CB371", "#2E8B57", "#00FA9A"],  
+			"neutral": ["#808080", "#696969", "#A9A9A9"]   
+		};
+
+		let words = {
+			"excited": {
+				subjects: ["The sun", "A child", "This adventure", "The wind"],
+				adjectives: ["shining", "golden", "brilliant", "joyful"],
+				nouns: ["ocean", "mountain", "celebration", "energy"],
+				verbs: ["leaps", "dances", "shouts", "glows"],
+				adverbs: ["happily", "boldly", "quickly", "cheerfully"]
+			},
+			"sad": {
+				subjects: ["The shadow", "A tear", "The night", "The past"],
+				adjectives: ["lonely", "gray", "forgotten", "silent"],
+				nouns: ["dream", "memory", "pain", "whisper"],
+				verbs: ["falls", "fades", "whispers", "lingers"],
+				adverbs: ["softly", "slowly", "quietly", "gently"]
+			},
+			"angry": {
+				subjects: ["The storm", "A fire", "The wind", "The rage"],
+				adjectives: ["furious", "wild", "burning", "restless"],
+				nouns: ["flame", "thunder", "wave", "war"],
+				verbs: ["roars", "shatters", "burns", "destroys"],
+				adverbs: ["relentlessly", "fiercely", "violently", "boldly"]
+			},
+			"relaxed": {
+				subjects: ["The breeze", "A river", "The sunset", "The whisper"],
+				adjectives: ["calm", "gentle", "soothing", "peaceful"],
+				nouns: ["lake", "forest", "horizon", "reflection"],
+				verbs: ["flows", "rests", "drifts", "breathes"],
+				adverbs: ["softly", "gently", "peacefully", "slowly"]
+			},
+			"neutral": {
+				subjects: ["The day", "A road", "The moment", "The silence"],
+				adjectives: ["ordinary", "simple", "plain", "unnoticed"],
+				nouns: ["path", "cloud", "thought", "dream"],
+				verbs: ["moves", "exists", "continues", "remains"],
+				adverbs: ["casually", "simply", "quietly", "calmly"]
+			}
+		};
+
+		function generatePoem() {
+			let mood = document.getElementById("mood-select").value;
+			let poemLength = document.getElementById("poem-length").value;
+			let output = document.getElementById("output");
+
+			if (!moodColors[mood]) {
+				output.innerHTML = "Please select a mood!";
+				return;
+			}
+
+			let colorRange = moodColors[mood];
+			let randomColor = colorRange[Math.floor(Math.random() * colorRange.length)];
+			document.body.style.backgroundColor = randomColor;
+
+			let moodWords = words[mood];
+
+			let poem = "";
+			for (let i = 0; i < poemLength; i++) {
+				let subject = moodWords.subjects[Math.floor(Math.random() * moodWords.subjects.length)];
+				let adjective = moodWords.adjectives[Math.floor(Math.random() * moodWords.adjectives.length)];
+				let noun = moodWords.nouns[Math.floor(Math.random() * moodWords.nouns.length)];
+				let verb = moodWords.verbs[Math.floor(Math.random() * moodWords.verbs.length)];
+				let adverb = moodWords.adverbs[Math.floor(Math.random() * moodWords.adverbs.length)];
+
+				poem += `${subject} is ${adjective} ${noun}, ${verb} ${adverb}.<br>`;
+			}
+
+			output.innerHTML = poem;
+		}
+	</script>
+
 </body>
+
 </html>
